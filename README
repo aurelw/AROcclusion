@@ -1,0 +1,54 @@
+AROcclusion README - Sep 21 2011, Aurel Wildfellner
+
++------------------+
+|   INTRODUCTION   |
++------------------+
+This project holds a modified version of ARToolKit, to support the streaming of video over OpenNi, for e.g. from the kinect sensor. In addition a registered depth image can also be retrieved. A simple test application is also included, which demonstrates proper rendered occlusion of virtual objects.
+
++------------------+
+|     BUILDING     |
++------------------+
+You will need a working OpenNi development version installed , to build ARToolKit.
+
+./Configure 
+    Select '6' for OpenNi
+    yes
+    yes
+make
+
++------------------+
+| VIDEO INTERFACE  |
++------------------+
+include/AR/sys/videoOpenNI.h defines several functions to extend the video.h interface for handling a depth image. Implemented in lib/SRC/VideoOpenNI/.
+
+ARUint32* arVideoGetDepthImage(void); -- Use this to get the registered depth image. The value encodes the distance from the sensor in millimeters. 0 for undefined.
+
++-------------------------+
+| DEPTH BUFFER CONVERSION |
++-------------------------+
+For applications as proper occlusion of virtual objects, you may need to convert the range image obtained from openni to a OpenGL zbuffer. 
+
+Computing this directly might be the only proper solution, however the current does this rather different.
+
+Run ./bin/calib_openni (follow the instructions)
+    Place the marker in the middle of the screen at the red dot.
+    Press s to take a 'sample'.
+    Now place the marker at a different distance from the camera and repeat the last steps.
+    Do this in 5-10 cm increments in the entire depth-range, which you want to measure later on.
+    Save the two sample vectors, which are printed after pressing 'esc'.
+
+Use the two vectors to fit a polynomial function (good results with degree 4). You can do this with octave:
+    polyfit(kinectD,zbufferD,4);
+Use this function for conversion (see openniTest.c for example).
+
+
++-------------------------+
+|       OPENNI TEST       |
++-------------------------+
+Print out the standard 'Hiro' marker.
+Run ./bin/openniTest
+A cube appears on the marker.
+If you place any real object in front of the cube, it gets occluded by it.
+Be careful not to occluded the marker itself with the real object.
+
+
