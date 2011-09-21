@@ -1,0 +1,27 @@
+INC_DIR= ../../include
+LIB_DIR= ../../lib
+BIN_DIR= ../../bin
+
+LDFLAG=@LDFLAG@ -L$(LIB_DIR)
+LIBS= -lARgsub -lARvideo -lAR @LIBS@
+CFLAG= @CFLAG@ -I$(INC_DIR)
+
+OBJS =
+HEADDERS =
+
+all: $(BIN_DIR)/calib_openni
+
+$(BIN_DIR)/calib_openni: calib_openni.o $(OBJS)
+	cc -o $(BIN_DIR)/calib_openni calib_openni.o $(OBJS) $(LDFLAG) $(LIBS)
+
+calib_openni.o: calib_openni.c $(HEADDERS)
+	cc -c $(CFLAG) calib_openni.c
+
+clean:
+	rm -f *.o
+	rm -f $(BIN_DIR)/calib_openni
+
+allclean:
+	rm -f *.o
+	rm -f $(BIN_DIR)/calib_openni
+	rm -f Makefile

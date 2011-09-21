@@ -1,0 +1,27 @@
+INC_DIR= ../../include
+LIB_DIR= ../../lib
+BIN_DIR= ../../bin
+
+LDFLAG=@LDFLAG@ -L$(LIB_DIR)
+LIBS= -lARgsub -lARvideo -lAR @LIBS@
+CFLAG= @CFLAG@ -I$(INC_DIR)
+
+OBJS =
+HEADDERS =
+
+all: $(BIN_DIR)/openniTest
+
+$(BIN_DIR)/openniTest: openniTest.o $(OBJS)
+	cc -o $(BIN_DIR)/openniTest openniTest.o $(OBJS) $(LDFLAG) $(LIBS)
+
+openniTest.o: openniTest.c $(HEADDERS)
+	cc -c $(CFLAG) openniTest.c
+
+clean:
+	rm -f *.o
+	rm -f $(BIN_DIR)/openniTest
+
+allclean:
+	rm -f *.o
+	rm -f $(BIN_DIR)/openniTest
+	rm -f Makefile
